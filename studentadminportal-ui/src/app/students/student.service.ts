@@ -8,11 +8,15 @@ import { Students } from '../models/api-models/api-models/student-model';
 })
 export class StudentService {
 
-  private baseUrl = 'http://localhost:7255/api/'
+  private baseUrl = 'http://localhost:7255/api/Students'
 
   constructor(private httpClient: HttpClient) { }
 
-  getStudent() : Observable<Students[]>{
-    return this.httpClient.get<Students[]>(this.baseUrl+'Students/GetAllStudent')
+  getStudents() : Observable<Students[]>{
+    return this.httpClient.get<Students[]>(this.baseUrl+'/GetAllStudent')
+  }
+
+  getStudent(studentId: string) : Observable<Students>{
+    return this.httpClient.get<Students>(this.baseUrl+'/GetStudentById/'+studentId)
   }
 }

@@ -5,7 +5,7 @@ export interface Students{
   studentId: string,
   studentFirstName: string,
   studentLastname: string,
-  mobile:string
+  mobile:number,
   email:string,
   dob:string,
   profileImageUrl:string,
