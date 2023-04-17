@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../student.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Students } from 'src/app/models/api-models/ui-models/student-ui-model';
 import { GenderService } from 'src/app/services/gender.service';
 import { Gender } from 'src/app/models/api-models/ui-models/gender-ui-model';
@@ -38,7 +38,7 @@ export class ViewStudentComponent implements OnInit{
   genderList: Gender[] = [];
   constructor(private readonly studentService: StudentService,
     private readonly route: ActivatedRoute, private readonly genderService: GenderService,
-    private snakebar: MatSnackBar){
+    private snakebar: MatSnackBar, private router: Router){
 
     }
 
@@ -77,6 +77,25 @@ export class ViewStudentComponent implements OnInit{
       },
       (errorResponse) => {
         this.snakebar.open('Student Updated Failed', undefined, {
+          duration: 2000
+        });
+      }
+    )
+  }
+
+  onDelete() : void{
+    this.studentService.deleteSudent(this.student.studentId)
+    .subscribe(
+      (successResponse) => {
+        this.snakebar.open('Student Deleted Successfully', undefined, {
+          duration: 2000
+        });
+        setTimeout(() => {
+          this.router.navigateByUrl('students');
+        }, 2000);
+      },
+      (errorResponse) => {
+        this.snakebar.open('Student Delete Failed', undefined, {
           duration: 2000
         });
       }
