@@ -37,6 +37,7 @@ export class ViewStudentComponent implements OnInit{
   isNewStudent: boolean= false;
   header: string = '';
   genderList: Gender[] = [];
+  displayProfileImageUrl = '';
   constructor(private readonly studentService: StudentService,
     private readonly route: ActivatedRoute, private readonly genderService: GenderService,
     private snakebar: MatSnackBar, private router: Router){
@@ -53,6 +54,7 @@ export class ViewStudentComponent implements OnInit{
           if(this.studentId.toLowerCase() === 'Add'.toLowerCase()){
             this.isNewStudent = true;
             this.header = "Add New Student";
+            this.setImage();
           }
           else{
             //else existing student detail page
@@ -61,6 +63,10 @@ export class ViewStudentComponent implements OnInit{
             .subscribe(
               (successResponse) => {
                 this.student = successResponse;
+                this.setImage();
+              },
+              (errorResponse) => {
+                this.setImage();
               }
             );
           }
@@ -132,6 +138,42 @@ export class ViewStudentComponent implements OnInit{
       }
     )
   }
+
+  uploadImage(event: any): void{
+    if(this.student){
+      const file: File = event.target.files[0];
+      this.studentService.uploadImage(this.student.studentId, file)
+      .subscribe(
+        (successResponse) => {
+          this.student.profileImageUrl = successResponse;
+          this.setImage();
+          this.snakebar.open('Student image updated successfully', undefined, {
+            duration: 2000
+          });
+        },
+        (errorResponse) => {
+          this.snakebar.open('Student image update Failed', undefined, {
+            duration: 2000
+          });
+        }
+      )
+    }
+  }
+
+  private setImage():void{
+    if(this.student.profileImageUrl){
+      console.log('if');
+      //fetch the image by url
+      this.displayProfileImageUrl = this.studentService.getImagePath(this.student.profileImageUrl);
+    }
+    else{
+      //Display Image
+      console.log('else');
+      this.displayProfileImageUrl = 'assets/user1.webp';
+    }
+  }
+
+
 
 
 }
