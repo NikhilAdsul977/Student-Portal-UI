@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../student.service';
 import { ActivatedRoute } from '@angular/router';
 import { Students } from 'src/app/models/api-models/ui-models/student-ui-model';
+import { GenderService } from 'src/app/services/gender.service';
+import { Gender } from 'src/app/models/api-models/ui-models/gender-ui-model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-view-student',
@@ -30,8 +34,11 @@ export class ViewStudentComponent implements OnInit{
       zipCode: ''
     }
   }
+
+  genderList: Gender[] = [];
   constructor(private readonly studentService: StudentService,
-    private readonly route: ActivatedRoute){
+    private readonly route: ActivatedRoute, private readonly genderService: GenderService,
+    private snakebar: MatSnackBar){
 
     }
 
@@ -50,6 +57,31 @@ export class ViewStudentComponent implements OnInit{
         }
       }
     );
+
+    this.genderService.getGender()
+    .subscribe(
+      (successResponse) => {
+        this.genderList = successResponse;
+      }
+    )
   }
+
+  onUpdate() : void{
+    this.studentService.updateStudent(this.student.studentId, this.student)
+    .subscribe(
+      (successResponse) => {
+        this.student = successResponse;
+        this.snakebar.open('Student Updated Successfully', undefined, {
+          duration: 2000
+        });
+      },
+      (errorResponse) => {
+        this.snakebar.open('Student Updated Failed', undefined, {
+          duration: 2000
+        });
+      }
+    )
+  }
+
 
 }
