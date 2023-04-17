@@ -34,7 +34,8 @@ export class ViewStudentComponent implements OnInit{
       zipCode: ''
     }
   }
-
+  isNewStudent: boolean= false;
+  header: string = '';
   genderList: Gender[] = [];
   constructor(private readonly studentService: StudentService,
     private readonly route: ActivatedRoute, private readonly genderService: GenderService,
@@ -48,12 +49,21 @@ export class ViewStudentComponent implements OnInit{
         this.studentId = params.get('id');
 
         if(this.studentId){
-          this.studentService.getStudent(this.studentId)
-          .subscribe(
-            (successResponse) => {
-              this.student = successResponse;
-            }
-          );
+          //if route has add it will be new student add page
+          if(this.studentId.toLowerCase() === 'Add'.toLowerCase()){
+            this.isNewStudent = true;
+            this.header = "Add New Student";
+          }
+          else{
+            //else existing student detail page
+            this.header = "Edit Students";
+            this.studentService.getStudent(this.studentId)
+            .subscribe(
+              (successResponse) => {
+                this.student = successResponse;
+              }
+            );
+          }
         }
       }
     );
@@ -96,6 +106,27 @@ export class ViewStudentComponent implements OnInit{
       },
       (errorResponse) => {
         this.snakebar.open('Student Delete Failed', undefined, {
+          duration: 2000
+        });
+      }
+    )
+  }
+
+  onAdd() : void{
+    this.studentService.addStudent(this.student)
+    .subscribe(
+      (successResponse) => {
+        this.student = successResponse;
+        this.snakebar.open('Student Added Successfully', undefined, {
+          duration: 2000
+        });
+        setTimeout(() => {
+          this.router.navigateByUrl('students/'+successResponse.studentId);
+          this.isNewStudent = false;
+        }, 2000);
+      },
+      (errorResponse) => {
+        this.snakebar.open('Student Add Failed', undefined, {
           duration: 2000
         });
       }
