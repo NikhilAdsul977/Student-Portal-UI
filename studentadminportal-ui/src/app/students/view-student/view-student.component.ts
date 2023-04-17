@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { StudentService } from '../student.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Students } from 'src/app/models/api-models/ui-models/student-ui-model';
@@ -6,6 +6,7 @@ import { GenderService } from 'src/app/services/gender.service';
 import { Gender } from 'src/app/models/api-models/ui-models/gender-ui-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-view-student',
@@ -38,6 +39,8 @@ export class ViewStudentComponent implements OnInit{
   header: string = '';
   genderList: Gender[] = [];
   displayProfileImageUrl = '';
+  @ViewChild('studentDetailsForm') studentDetailsForm?: NgForm;
+
   constructor(private readonly studentService: StudentService,
     private readonly route: ActivatedRoute, private readonly genderService: GenderService,
     private snakebar: MatSnackBar, private router: Router){
@@ -119,44 +122,48 @@ export class ViewStudentComponent implements OnInit{
   }
 
   onAdd() : void{
-    this.studentService.addStudent(this.student)
-    .subscribe(
-      (successResponse) => {
-        this.student = successResponse;
-        this.snakebar.open('Student Added Successfully', undefined, {
-          duration: 2000
-        });
-        setTimeout(() => {
-          this.router.navigateByUrl('students/'+successResponse.studentId);
-          this.isNewStudent = false;
-        }, 2000);
-      },
-      (errorResponse) => {
-        this.snakebar.open('Student Add Failed', undefined, {
-          duration: 2000
-        });
-      }
-    )
-  }
-
-  uploadImage(event: any): void{
-    if(this.student){
-      const file: File = event.target.files[0];
-      this.studentService.uploadImage(this.student.studentId, file)
+    if(this.studentDetailsForm?.form.valid){
+      this.studentService.addStudent(this.student)
       .subscribe(
         (successResponse) => {
-          this.student.profileImageUrl = successResponse;
-          this.setImage();
-          this.snakebar.open('Student image updated successfully', undefined, {
+          this.student = successResponse;
+          this.snakebar.open('Student Added Successfully', undefined, {
             duration: 2000
           });
+          setTimeout(() => {
+            this.router.navigateByUrl('students/'+successResponse.studentId);
+            this.isNewStudent = false;
+          }, 2000);
         },
         (errorResponse) => {
-          this.snakebar.open('Student image update Failed', undefined, {
+          this.snakebar.open('Student Add Failed', undefined, {
             duration: 2000
           });
         }
       )
+    }
+  }
+
+  uploadImage(event: any): void{
+    if(this.studentDetailsForm?.form.valid){
+      if(this.student){
+        const file: File = event.target.files[0];
+        this.studentService.uploadImage(this.student.studentId, file)
+        .subscribe(
+          (successResponse) => {
+            this.student.profileImageUrl = successResponse;
+            this.setImage();
+            this.snakebar.open('Student image updated successfully', undefined, {
+              duration: 2000
+            });
+          },
+          (errorResponse) => {
+            this.snakebar.open('Student image update Failed', undefined, {
+              duration: 2000
+            });
+          }
+        )
+      }
     }
   }
 

@@ -23,7 +23,8 @@
               <mat-label>
                 First Name
               </mat-label>
-              <input type="text" matInput [(ngModel)]="student.studentFirstName" name="studentFirstName">
+              <input type="text" matInput [(ngModel)]="student.studentFirstName" name="studentFirstName" required>
+              <mat-error>First name is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-xs-6">
@@ -31,7 +32,8 @@
               <mat-label>
                 Last Name
               </mat-label>
-              <input type="text" matInput [(ngModel)]="student.studentLastname" name="studentLastname">
+              <input type="text" matInput [(ngModel)]="student.studentLastname" name="studentLastname" required>
+              <mat-error>Last name is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -41,7 +43,8 @@
               <mat-label>
                 Date of Birth
               </mat-label>
-              <input matInput [matDatepicker]="picker" [(ngModel)]="student.dob" name="dob">
+              <input matInput [matDatepicker]="picker" [(ngModel)]="student.dob" name="dob" required>
+              <mat-error>Date of Birth is required</mat-error>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -53,7 +56,8 @@
               <mat-label>
                 Email
               </mat-label>
-              <input type="text" matInput [(ngModel)]="student.email" name="email">
+              <input type="text" matInput [(ngModel)]="student.email" name="email" required>
+              <mat-error>Email is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-xs-6">
@@ -61,7 +65,8 @@
               <mat-label>
                 Mobile
               </mat-label>
-              <input type="number" matInput [(ngModel)]="student.mobile" name="mobile">
+              <input type="number" matInput [(ngModel)]="student.mobile" name="mobile" required>
+              <mat-error>Mobile is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -72,11 +77,12 @@
                 Gender
               </mat-label>
               <!-- <input type="text" matInput [(ngModel)]="student.gender.name" name="gender"> -->
-              <mat-select [(ngModel)]="student.gender.genderId" name="gender">
+              <mat-select [(ngModel)]="student.gender.genderId" name="gender" required>
                 <mat-option *ngFor="let gender of genderList" [value]="gender.genderId">
                   {{gender.name}}
                 </mat-option>
               </mat-select>
+              <mat-error>Gender is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -86,7 +92,8 @@
               <mat-label>
                 Physical Address
               </mat-label>
-              <textarea matInput [(ngModel)]="student.address.streetAdress" name="streetAdress"></textarea>
+              <textarea matInput [(ngModel)]="student.address.streetAdress" name="streetAdress" required></textarea>
+              <mat-error>Physical Address is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -96,7 +103,8 @@
               <mat-label>
                 Postal Address
               </mat-label>
-              <textarea matInput [(ngModel)]="student.address.zipCode" name="zipCode"></textarea>
+              <textarea matInput [(ngModel)]="student.address.zipCode" name="zipCode" required></textarea>
+              <mat-error>Postal Address is required</mat-error>
             </mat-form-field>
           </div>
         </div>
