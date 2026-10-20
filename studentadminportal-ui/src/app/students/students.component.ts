@@ -8,6 +8,7 @@ import { MatSort } from '@angular/material/sort';
 
 
 @Component({
+  standalone: false,
   selector: 'app-students',
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.css']

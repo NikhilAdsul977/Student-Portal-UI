@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { StudentService } from '../student.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { Students } from 'src/app/models/api-models/ui-models/student-ui-model';
-import { GenderService } from 'src/app/services/gender.service';
-import { Gender } from 'src/app/models/api-models/ui-models/gender-ui-model';
+import { Students } from '../../models/api-models/ui-models/student-ui-model';
+import { GenderService } from '../../services/gender.service';
+import { Gender } from '../../models/api-models/ui-models/gender-ui-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgForm } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'app-view-student',
   templateUrl: './view-student.component.html',
   styleUrls: ['./view-student.component.css']
