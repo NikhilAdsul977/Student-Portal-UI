@@ -1,23 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { AppComponent } from './app.component';
-import { TopNavComponent } from './layout/top-nav/top-nav.component';
+import { AppModule } from './app.module';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        MatButtonModule,
-        MatIconModule,
-        MatToolbarModule
-      ],
-      declarations: [
-        AppComponent,
-        TopNavComponent
+        AppModule
       ],
     }).compileComponents();
   });

@@ -22,7 +22,11 @@ Open `http://localhost:4200/`. The app also expects its backend API at `http://l
 
 ```sh
 npm run build
-npm test -- --watch=false --browsers=ChromeHeadless
+npm test
+npm run test:ci -- --coverage
 ```
+
+Vitest runs in jsdom, so the tests do not require launching a browser. `npm test` runs in watch mode; use `npm run test:ci` for a single, non-watch run.
+The coverage command uses the Vitest v8 provider and writes an HTML report to `coverage/studentadminportal-ui/index.html`.
 
 Production build output is written to `dist/studentadminportal-ui/browser/`.

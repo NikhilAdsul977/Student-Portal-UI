@@ -87,6 +87,10 @@ export class ViewStudentComponent implements OnInit{
   }
 
   onUpdate() : void{
+    if(!this.studentDetailsForm?.form.valid){
+      return;
+    }
+
     this.studentService.updateStudent(this.student.studentId, this.student)
     .subscribe(
       (successResponse) => {
@@ -145,38 +149,36 @@ export class ViewStudentComponent implements OnInit{
     }
   }
 
-  uploadImage(event: any): void{
-    if(this.studentDetailsForm?.form.valid){
-      if(this.student){
-        const file: File = event.target.files[0];
-        this.studentService.uploadImage(this.student.studentId, file)
-        .subscribe(
-          (successResponse) => {
-            this.student.profileImageUrl = successResponse;
-            this.setImage();
-            this.snakebar.open('Student image updated successfully', undefined, {
-              duration: 2000
-            });
-          },
-          (errorResponse) => {
-            this.snakebar.open('Student image update Failed', undefined, {
-              duration: 2000
-            });
-          }
-        )
-      }
+  uploadImage(event: Event): void{
+    const file = (event.target as HTMLInputElement | null)?.files?.[0];
+    if(!this.studentDetailsForm?.form.valid || !file){
+      return;
     }
+
+    this.studentService.uploadImage(this.student.studentId, file)
+    .subscribe(
+      (successResponse) => {
+        this.student.profileImageUrl = successResponse;
+        this.setImage();
+        this.snakebar.open('Student image updated successfully', undefined, {
+          duration: 2000
+        });
+      },
+      (errorResponse) => {
+        this.snakebar.open('Student image update Failed', undefined, {
+          duration: 2000
+        });
+      }
+    )
   }
 
   private setImage():void{
     if(this.student.profileImageUrl){
-      console.log('if');
       //fetch the image by url
       this.displayProfileImageUrl = this.studentService.getImagePath(this.student.profileImageUrl);
     }
     else{
       //Display Image
-      console.log('else');
       this.displayProfileImageUrl = 'assets/user1.webp';
     }
   }

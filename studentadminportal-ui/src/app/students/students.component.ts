@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { StudentService } from './student.service';
 //import { Students } from '../models/api-models/api-models/student-model';
 import { Students } from '../models/api-models/ui-models/student-ui-model';
@@ -13,7 +13,7 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.css']
 })
-export class StudentsComponent implements OnInit{
+export class StudentsComponent implements OnInit, AfterViewInit{
 
   students: Students[] = []
   displayedColumns: string[] = ['studentFirstName', 'studentLastname', 'dob', 'mobile', 'email', 'gender', 'edit'];
@@ -31,7 +31,7 @@ export class StudentsComponent implements OnInit{
     .subscribe(
       (successResponse)=>{
         this.students = successResponse
-        this.dataSource = new MatTableDataSource<Students>(this.students);
+        this.dataSource.data = this.students;
 
         if(this.matPaginator){
           this.dataSource.paginator = this.matPaginator;
@@ -44,6 +44,11 @@ export class StudentsComponent implements OnInit{
         console.log(errorResponse)
       }
     );
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.matPaginator;
+    this.dataSource.sort = this.matSort;
   }
 
   filterStudents(){
